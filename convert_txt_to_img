@@ -6,7 +6,8 @@ fi
 
 font='/usr/share/fonts/JetBrainsMonoNerdFontMono-Regular.ttf'
 
-magick -size 1920x1080 -background black -fill white \
+magick -size 1920x1080 -background black -fill red \
 	-font "$font" \
+	-pointsize 10 \
 	-gravity center \
 	label:@out.txt out.jpg 

@@ -5,7 +5,8 @@ convert images to ppm.
 
 ## Usage
 
-```
-asciiconv in.ppm
-cat out.txt
+```console
+$ ./convert_img_to_ppm in.jpeg in.ppm
+$ ./asciiconv in.ppm
+$ cat out.txt
 ```
