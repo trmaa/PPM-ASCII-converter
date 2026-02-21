@@ -48,41 +48,39 @@ int main(int argc, char *argv[])
 	if (!in)
 		fatal("File does not exist.", exit, EXIT_FAILURE);
 
-	int width, height;
+	const int width, height;
 	bool valid_format = fscanf(in, "P3\n%d %d\n255", &width, &height);
-	int len = width * height;
+	const int len = width * height;
 
 	if (!valid_format)
 		fatal("Wrong image format.\nImage shoud be ppm (P3).", help, EXIT_FAILURE);
 
 	FILE *out = fopen("out.txt", "w");
 
-	unsigned char r, g, b;
-	float bright;
-
-	char bvals[] = { ' ', '.', ':', '-', '+', '|', '(', 'I', 'W' };
-	int bvlen = sizeof(bvals);
+	const char bvals[] = { ' ', '.', ':', '-', '+', '|', 'I', '@' };
+	const int bvlen = sizeof(bvals);
 	int bvindex;
 
+	// progress bar vars
 	int iter = 0;
-
 	int prog_per = 0;
 	char prog_bar[101];
 	for (int i = 0; i < 100; i++)
 		prog_bar[i] = '-';
 	prog_bar[100] = 0;
 
+	unsigned char r, g, b;
+	float bright;
+
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			int read = fscanf(in, "%hhu %hhu %hhu\n", &r, &g, &b);	
-
-			if (read == -1)
+			if (fscanf(in, "%hhu %hhu %hhu\n", &r, &g, &b) == -1)
 				fatal("Image corrupted.", exit, EXIT_FAILURE);
 
 			bright = (float)(r + g + b) / (0xff * 3);
-			bvindex = bright * (bvlen-1);
+			bvindex = bright * bvlen; // bright will never be 1
 
-			for (int i = 0; i < 2; i++) // ascii's height is 4*widht 
+			for (int i = 0; i < 2; i++) // ascii's height is two times widht 
 				putc(bvals[bvindex], out);
 
 			iter++;

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [[ ! -f /usr/bin/magick ]]; then
+	echo -e "\e[1;31mYou need magick from ImageMagick to run this script\e[0m"
+fi
+
+font='/usr/share/fonts/JetBrainsMonoNerdFontMono-Regular.ttf'
+
+magick -size 1920x1080 -background black -fill white \
+	-font "$font" \
+	-gravity center \
+	label:@out.txt out.jpg 
