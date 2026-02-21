@@ -1,3 +1,23 @@
+/*
+ * ASCIICONV
+ *
+ * Reads from a .ppm image (path at argv[1]).
+ *
+ * The color infromation from the ppm (at each pixel) is transleted into 
+ * brightness values which then are used to create a text file with an ascii 
+ * representation of the image.
+ *
+ * USAGE:
+ * 	asciiconv file.ppm
+ * 	cat out.txt
+ *
+ * This file is under General Public License. This means: do with it as you
+ * please, but let it remain of public access under the same license.
+ *
+ * Author: 
+ * 	trmaa <trmaayt@gmail.com, 689 93 75 95> (Pablo Trik Marín)
+ *	21/2/2026
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
