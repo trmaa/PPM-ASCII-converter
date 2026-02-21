@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if [[ ! -f /usr/bin/magick ]]; then
+	echo -e "\e[1;31mYou need magick from ImageMagick to run this script\e[0m"
+fi
+
+helpp() {
+	echo "USE: convert_img_to_ppm some.some out.ppm"
+	exit $1
+}
+
+if (( $# < 2 )); then
+	helpp 1
+fi
+
+if (( $# < 3)); then
+	per=10
+else
+	per=$3
+fi
+
+img="$1"
+ppm="$2"
+
+magick "$img" -compress None -resize $per% "$ppm"
+
+vim "$ppm" +'%s/\(\d\+ \d\+ \d\+ \)/\1\r/g' +'%s/#\n//g' +wq

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void fatal(char *msg, void (*cb)(int), int status)
 {
@@ -11,6 +12,9 @@ void fatal(char *msg, void (*cb)(int), int status)
 void help(int status)
 {
 	fprintf(stderr, "USAGE: asciiconv your.ppm\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "The P3 format:\n");
+	fprintf(stderr, "\tP3\n\tW H\n\t255\n\tR G B\n\tR G B\n\tR G B\n\t...\n");
 	exit(status);
 }
 
@@ -25,10 +29,11 @@ int main(int argc, char *argv[])
 		fatal("File does not exist.", exit, EXIT_FAILURE);
 
 	int width, height;
-	int valid_format = fscanf(in, "P3\n%d %d\n255", &width, &height);
+	bool valid_format = fscanf(in, "P3\n%d %d\n255", &width, &height);
+	int len = width * height;
 
-	if (valid_format == -1)
-		fatal("Wrong image format.", help, EXIT_FAILURE);
+	if (!valid_format)
+		fatal("Wrong image format.\nImage shoud be ppm (P3).", help, EXIT_FAILURE);
 
 	FILE *out = fopen("out.txt", "w");
 
@@ -38,6 +43,14 @@ int main(int argc, char *argv[])
 	char bvals[] = { ' ', '.', ':', '-', '+', '|', '(', 'I', 'W' };
 	int bvlen = sizeof(bvals);
 	int bvindex;
+
+	int iter = 0;
+
+	int prog_per = 0;
+	char prog_bar[101];
+	for (int i = 0; i < 100; i++)
+		prog_bar[i] = '-';
+	prog_bar[100] = 0;
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
@@ -49,8 +62,14 @@ int main(int argc, char *argv[])
 			bright = (float)(r + g + b) / (0xff * 3);
 			bvindex = bright * (bvlen-1);
 
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < 2; i++) // ascii's height is 4*widht 
 				putc(bvals[bvindex], out);
+
+			iter++;
+			prog_per = 99 * ((float)iter / len);
+			prog_bar[prog_per] = '#';
+			//fprintf(stderr, "\e[1;1H\e[2J");
+			fprintf(stderr, "[%s]%d%%\n", prog_bar, prog_per);
 		}
 		putc('\n', out);
 	}
