@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 	FILE *out = fopen("out.txt", "w");
 
 	const char bvals[] = { ' ', '.', ':', '-', '+', '|', 'I', '@' };
+	//const char bvals[] = { ' ', '.', ':', '-', '+', '|', 'I', 'J', '@', '#', '%', '&', 'W', 'M', 'B', 'Q', '8', '$', '0', '#' };	
 	const int bvlen = sizeof(bvals);
 	int bvindex;
 
@@ -79,6 +80,25 @@ int main(int argc, char *argv[])
 
 			bright = (float)(r + g + b) / (0xff * 3);
 			bvindex = bright * bvlen; // bright will never be 1
+
+#ifdef COLOR
+			// make any color max brightness
+			if (r >= g && r >= b) {
+				g = 255 * (float)g/r;
+				b = 255 * (float)b/r;
+				r = 255;
+			} else if (g >= r && g >= b) {
+				r = 255 * (float)r/g;
+				b = 255 * (float)b/g;
+				g = 255;
+			} else {
+				r = 255 * (float)r/b;
+				g = 255 * (float)g/b;
+				b = 255;
+			}
+
+			fprintf(out, "\e[38;2;%d;%d;%dm", r, g, b);
+#endif
 
 			for (int i = 0; i < 2; i++) // ascii's height is two times widht 
 				putc(bvals[bvindex], out);
