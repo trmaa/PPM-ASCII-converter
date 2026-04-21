@@ -15,7 +15,7 @@
  * please, but let it remain of public access under the same license.
  *
  * Author: 
- * 	trmaa <trmaayt@gmail.com, 689 93 75 95> (Pablo Trik Marín)
+ * 	trmaa <mail@pablotrik.online, 689 93 75 95> (Pablo Trik Marín)
  *	21/2/2026
  */
 #include <stdio.h>
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
 	FILE *out = fopen("out.txt", "w");
 
-	const char bvals[] = { ' ', '.', ':', '-', '+', '|', 'I', '@' };
+	const char bvals[] = { ' ', '.', ':', '+', '|', 'I', '@' };
 	//const char bvals[] = { ' ', '.', ':', '-', '+', '|', 'I', 'J', '@', '#', '%', '&', 'W', 'M', 'B', 'Q', '8', '$', '0', '#' };	
 	const int bvlen = sizeof(bvals);
 	int bvindex;
@@ -111,4 +111,7 @@ int main(int argc, char *argv[])
 		}
 		putc('\n', out);
 	}
+
+	fclose(in);
+	fclose(out);
 }

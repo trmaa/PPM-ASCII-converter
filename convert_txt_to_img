@@ -6,7 +6,7 @@ fi
 
 font='/usr/share/fonts/JetBrainsMonoNerdFontMono-Regular.ttf'
 
-magick -size 1920x1080 -background black -fill red \
+magick -size 1920x1080 -background black -fill white \
 	-font "$font" \
 	-pointsize 10 \
 	-gravity center \
